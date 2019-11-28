@@ -15,10 +15,15 @@ public class ResourceController {
 
     @PostMapping("/save")
     public Resource save(@RequestBody ResourceDTO resourceDTO) {
-        return resourceService.save(resourceDTO);
+        return resourceService.postResource(resourceDTO);
     }
 
-  @GetMapping("/getId/{id}")
+    @GetMapping("/get")
+    public Resource[] getResourceCollection() {
+        return resourceService.getResourceCollection();
+    }
+
+    @GetMapping("/getId/{id}")
     public Resource getResourceById(@PathVariable(name = "id") Long id) {
         return resourceService.getResourceById(id);
     }

@@ -17,12 +17,17 @@ public class UserController {
 
     @PostMapping("/save")
     public User save(@RequestBody UserDTO userDTO) {
-        return userService.save(userDTO);
+        return userService.postUser(userDTO);
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable(name = "id") Long id) {
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/get")
+    public User[] getUsersCollection() {
+        return userService.getUsersCollection();
     }
 
     @PutMapping("/update")
