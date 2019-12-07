@@ -5,6 +5,8 @@ import com.example.demo.model.Resource;
 import com.example.demo.service.ResourceService;
 import org.springframework.web.bind.annotation.*;
 
+@RestController
+@RequestMapping("/api/resources")
 public class ResourceController {
 
     ResourceService resourceService;

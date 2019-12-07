@@ -6,6 +6,8 @@ public class ResourceDTO {
     private String link;
     private String level;
 
+    public ResourceDTO() { }
+
     public ResourceDTO(String link, String level) {
         this.link = link;
         this.level = level;

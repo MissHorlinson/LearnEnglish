@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -10,29 +11,41 @@ public class User  {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private Long id;
-    @Column(name = "password")
-    private String password;
+
     @Column(name = "user_name")
     private String name;
+
     @Column(name = "user_surname")
     private String surname;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "user_level")
     private String level;
-    @Column(name = "status")
-    private int status;
 
-/*    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;*/
+    @Column(name = "status")
+    private Status status;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
 
     public User() {}
 
-    public User(String password, String name, String surname, String level/*, Set<Role> roles*/) {
-        this.password = password;
+    public User(String name, String surname, String email, String password, String level, /*Status status,*/ List<Role> roles) {
         this.name = name;
         this.surname = surname;
+        this.email =email;
+        this.password = password;
         this.level = level;
-        //this.roles = roles;
+        //this.status = status;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -41,14 +54,6 @@ public class User  {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -67,6 +72,22 @@ public class User  {
         this.surname = surname;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getLevel() {
         return level;
     }
@@ -75,19 +96,19 @@ public class User  {
         this.level = level;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-   /* public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }*/
+    }
 }

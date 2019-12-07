@@ -32,12 +32,7 @@ public class UserController {
 
     @PutMapping("/update")
     public User update(@RequestBody UserDTO userDTO) {
-        try {
-            return userService.update(userDTO);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return userService.update(userDTO);
     }
 
     @DeleteMapping("/delete")

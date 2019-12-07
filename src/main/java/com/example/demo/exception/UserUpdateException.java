@@ -1,8 +1,15 @@
 package com.example.demo.exception;
 
-public class UserUpdateException extends Exception {
+import java.io.IOException;
+
+public class UserUpdateException extends RuntimeException {
 
     public UserUpdateException(String message) {
         super(message);
+    }
+
+    @Override
+    public String getMessage() {
+        return super.getMessage();
     }
 }
