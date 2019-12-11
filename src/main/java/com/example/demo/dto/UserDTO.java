@@ -1,8 +1,10 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.Role;
+import com.example.demo.model.Status;
+import com.example.demo.model.User;
 
-import java.util.Set;
+import java.util.List;
 
 public class UserDTO {
 
@@ -12,21 +14,32 @@ public class UserDTO {
     private String email;
     private String password;
     private String level;
-    private int status;
-    private Set<Role> roles;
+    private Status status;
+    private List<Role> roles;
 
     public UserDTO() { }
 
-    public UserDTO(String name, String surname, String email, String password,  String level /*, int status*/, Set<Role> roles) {
+    public UserDTO(String name, String surname, String email, String password, String level , Status status, List<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
         this.level = level;
-        //this.status = status;
+        this.status = status;
         this.roles = roles;
     }
 
+
+    public static UserDTO forUser(User user) {
+        UserDTO userDTO = new UserDTO();
+        //userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setSurname(user.getSurname());
+        userDTO.setLevel(user.getLevel());
+        userDTO.setEmail(user.getEmail());
+
+        return userDTO;
+    }
 
     public Long getId() {
         return id;
@@ -76,19 +89,19 @@ public class UserDTO {
         this.level = level;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

@@ -3,7 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -11,6 +17,7 @@ public class UserController {
 
     UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -20,13 +27,8 @@ public class UserController {
         return userService.postUser(userDTO);
     }
 
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable(name = "id") Long id) {
-        return userService.getUserById(id);
-    }
-
     @GetMapping("/get")
-    public User[] getUsersCollection() {
+    public List<User> getUsersCollection() {
         return userService.getUsersCollection();
     }
 
@@ -35,13 +37,7 @@ public class UserController {
         return userService.update(userDTO);
     }
 
-    @DeleteMapping("/delete")
-    public void delete(@RequestBody UserDTO userDTO) {
-        try {
-            userService.delete(userDTO);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private UserDTO getUserInfo(User user) {
+        return UserDTO.forUser(user);
     }
-
 }

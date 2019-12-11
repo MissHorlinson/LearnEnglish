@@ -5,12 +5,14 @@ public class ResourceDTO {
     private Long id;
     private String link;
     private String level;
+    private String type;
 
     public ResourceDTO() { }
 
-    public ResourceDTO(String link, String level) {
+    public ResourceDTO(String link, String level, String type) {
         this.link = link;
         this.level = level;
+        this.type = type;
     }
 
     public Long getId() {
@@ -35,6 +37,14 @@ public class ResourceDTO {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

@@ -27,10 +27,11 @@ public class User  {
     @Column(name = "user_level")
     private String level;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -38,13 +39,13 @@ public class User  {
 
     public User() {}
 
-    public User(String name, String surname, String email, String password, String level, /*Status status,*/ List<Role> roles) {
+    public User(String name, String surname, String email, String password, String level, Status status, List<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.email =email;
         this.password = password;
         this.level = level;
-        //this.status = status;
+        this.status = status;
         this.roles = roles;
     }
 

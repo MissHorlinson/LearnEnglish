@@ -3,7 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.dto.ResourceDTO;
 import com.example.demo.model.Resource;
 import com.example.demo.service.ResourceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -11,6 +14,7 @@ public class ResourceController {
 
     ResourceService resourceService;
 
+    @Autowired
     public ResourceController(ResourceService resourceService) {
         this.resourceService = resourceService;
     }
@@ -21,7 +25,7 @@ public class ResourceController {
     }
 
     @GetMapping("/get")
-    public Resource[] getResourceCollection() {
+    public List<Resource> getResourceCollection() {
         return resourceService.getResourceCollection();
     }
 
@@ -31,7 +35,7 @@ public class ResourceController {
     }
 
     @GetMapping("/getLevel/{level}")
-    public Resource getResourceByLevel(@PathVariable(name = "level") String level) {
+    public Resource[] getResourceByLevel(@PathVariable(name = "level") String level) {
         return resourceService.getResourceByLevel(level);
     }
 

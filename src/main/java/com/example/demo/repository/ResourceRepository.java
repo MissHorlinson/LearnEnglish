@@ -7,5 +7,5 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
     Resource findResourceById(Long id);
 
-    Resource findResourceByLevel(String level);
+    Resource[] findAllByLevel(String level);
 }
