@@ -12,9 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -35,24 +33,23 @@ public class UserService {
     }
 
     public User postUser(UserDTO userDTO) {
-        Role role = roleRepository.findByRole("USER");
+        Role role = roleRepository.findByRole("ROLE_USER");
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(role);
-        User user = new User(userDTO.getName(), userDTO.getSurname(), userDTO.getEmail(), userDTO.getPassword(), userDTO.getLevel(), Status.ACTIVE, userRoles);
+
+        User user = new User(userDTO.getName(),
+                             userDTO.getSurname(),
+                             userDTO.getEmail(),
+                             encode(userDTO.getPassword()),
+                             userDTO.getLevel(),
+                             Status.ACTIVE,
+                             userRoles);
         user = userRepository.save(user);
         log.info("IN postUser: " + userDTO.toString() + " created " );
         return user;
     }
 
     public List<User> getUsersCollection() {
-        /*String url = "http://localhost:8080/api/users";
-        ResponseEntity<User[]> userCollection = this.restTemplate.getForEntity(url, User[].class);
-        if (userCollection.getStatusCode() == HttpStatus.OK) {
-            return userCollection.getBody();
-        } else {
-            log.warn("Can not take users collection");
-            return null;
-        }*/
         return userRepository.findAll();
     }
 
@@ -82,7 +79,7 @@ public class UserService {
             user.setName(userDTO.getName());
             user.setSurname(userDTO.getSurname());
             user.setEmail(userDTO.getEmail());
-            user.setPassword(userDTO.getPassword());
+            user.setPassword(encode(userDTO.getPassword()));
             user.setLevel(userDTO.getLevel());
             user = userRepository.save(user);
             log.info("IN user - update: user " + userDTO.toString() + " updated");
@@ -93,23 +90,57 @@ public class UserService {
                 "Can not update user - " + userDTO.toString());
     }
 
+    public User updateRole(Long id, Role role) {
+        if (userRepository.findById(id).isPresent()) {
+            role = roleRepository.findByRole(role.getRole());
+            User user = userRepository.getOne(id);
+            user.setRoles(role);
+            user = userRepository.save(user);
+            log.info("IN userRole - update: new Role added successfully");
+            return user;
+        }
+        log.warn("In userRole - update: can not update user Role");
+        throw new UserUpdateException(
+                "Can not update user Role");
+    }
+
+    public User updateLearnt(User user) {
+        user = userRepository.save(user);
+        return user;
+    }
+
+    public User updateLevel(Long id) {
+        if (userRepository.findById(id).isPresent()) {
+            User user = userRepository.getOne(id);
+            int level = user.getLevel().ordinal();
+            user.setLevel(Level.values()[level + 1]);
+            user = userRepository.save(user);
+            log.info("IN userLevel - update: level updated");
+            return user;
+        }
+        log.warn("IN userLevel - update: can not update level");
+        throw new UserUpdateException(
+                "Can not update user level");
+    }
+
     public void delete(UserDTO userDTO) {
         if(userRepository.findById(userDTO.getId()).isPresent()) {
             User user = userRepository.getOne(userDTO.getId());
+            user.getRoles().clear();
+            user.getLearnt().clear();
+            userRepository.save(user);
             userRepository.delete(user);
-            if (userRepository.findById(userDTO.getId()) == null) {
-                log.info("IN user - delete: user " + userDTO.toString() + " deleted successful");
-            } else {
+            if (userRepository.findById(userDTO.getId()).isPresent()) {
                 log.warn("IN user - delete: something wrong with deleting user " + userDTO.toString());
                 throw new UserDeleteException("Can not delete user - " + userDTO.toString());
+            } else {
+                log.info("IN user - delete: user " + userDTO.toString() + " deleted successful");
             }
         }
     }
 
-    private HttpHeaders buildHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        return headers;
+    public String encode(String password) {
+        password = passwordEncoder.encode(password);
+        return password;
     }
 }

@@ -1,9 +1,5 @@
 package com.example.demo.dto;
-
-import com.example.demo.model.Role;
-import com.example.demo.model.Status;
-import com.example.demo.model.User;
-
+import com.example.demo.model.*;
 import java.util.List;
 
 public class UserDTO {
@@ -13,13 +9,14 @@ public class UserDTO {
     private String surname;
     private String email;
     private String password;
-    private String level;
+    private Level level;
+    private List<Resource> resources;
     private Status status;
     private List<Role> roles;
 
     public UserDTO() { }
 
-    public UserDTO(String name, String surname, String email, String password, String level , Status status, List<Role> roles) {
+    public UserDTO(String name, String surname, String email, String password, Level level, Status status, List<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -29,16 +26,10 @@ public class UserDTO {
         this.roles = roles;
     }
 
-
-    public static UserDTO forUser(User user) {
-        UserDTO userDTO = new UserDTO();
-        //userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setSurname(user.getSurname());
-        userDTO.setLevel(user.getLevel());
-        userDTO.setEmail(user.getEmail());
-
-        return userDTO;
+    public UserDTO(Long id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
     }
 
     public Long getId() {
@@ -81,12 +72,20 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getLevel() {
+    public Level getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Level level) {
         this.level = level;
+    }
+
+    public List<Resource> getLearnt() {
+        return resources;
+    }
+
+    public void setLearnt(Resource learnt) {
+        this.resources.add(learnt);
     }
 
     public Status getStatus() {

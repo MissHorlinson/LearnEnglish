@@ -1,44 +1,49 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.UserDTO;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin")
-public class AdminController {
+@RequestMapping("/api/admin/users")
+public class AdminUserController {
 
     UserService userService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminUserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/users/save")
+    @PostMapping("/save")
     public User save(@RequestBody UserDTO userDTO) {
         return userService.postUser(userDTO);
     }
 
-    @GetMapping("/users/get")
+    @GetMapping("/get")
     public List<User> getUsersCollection() {
         return userService.getUsersCollection();
     }
 
-    @GetMapping("/users/getId/{id}")
+    @GetMapping("/getId/{id}")
     public User getUserById(@PathVariable(name = "id") Long id) {
         return userService.getUserById(id);
     }
 
-    @DeleteMapping("/users/delete")
+    @PutMapping("/updateRole/{id}")
+    public User updateRole(@PathVariable(name = "id") Long id, @RequestBody Role role) {
+        return userService.updateRole(id, role);
+    }
+
+    @DeleteMapping("/delete")
     public void delete(@RequestBody UserDTO userDTO) {
         try {
+            System.out.println("controller");
             userService.delete(userDTO);
         } catch (Exception e) {
             e.printStackTrace();

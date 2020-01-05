@@ -5,23 +5,24 @@ import com.example.demo.model.Level;
 import com.example.demo.model.Resource;
 import com.example.demo.model.Type;
 import com.example.demo.service.ResourceService;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/resources")
-public class ResourceController {
-
+@RequestMapping("/api/admin/resources")
+public class AdminResourceController {
     ResourceService resourceService;
 
     @Autowired
-    public ResourceController(ResourceService resourceService) {
+    public AdminResourceController(ResourceService resourceService) {
         this.resourceService = resourceService;
+    }
+
+    @PostMapping("/save")
+    public Resource save(@RequestBody ResourceDTO resourceDTO) {
+        return resourceService.postResource(resourceDTO);
     }
 
     @GetMapping("/get")
@@ -44,8 +45,22 @@ public class ResourceController {
         return resourceService.getResourceByType(type);
     }
 
-    @GetMapping("/start")
-    public Resource getResourceByLevelAndType(Level level, Type type, List<Long> learnt) {
-        return resourceService.start(level, type, learnt);
+    @PutMapping("/update")
+    public Resource update(@RequestBody ResourceDTO resourceDTO) {
+        try {
+            return resourceService.update(resourceDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable(name = "id") Long id) {
+        try {
+            resourceService.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

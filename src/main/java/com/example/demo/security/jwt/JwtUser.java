@@ -1,5 +1,6 @@
 package com.example.demo.security.jwt;
 
+import com.example.demo.model.Level;
 import com.example.demo.model.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,11 +17,11 @@ public class JwtUser implements UserDetails {
     private final String surname;
     private final String email;
     private final String password;
-    private final String level;
+    private final Level level;
     private final boolean enabled;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser(Long id, String name, String surname, String email, String password, String level, Collection<? extends GrantedAuthority> authorities, boolean enabled) {
+    public JwtUser(Long id, String name, String surname, String email, String password, Level level, Collection<? extends GrantedAuthority> authorities, boolean enabled) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -76,7 +77,7 @@ public class JwtUser implements UserDetails {
         return email;
     }
 
-    public String getLevel() {
+    public Level getLevel() {
         return level;
     }
 
